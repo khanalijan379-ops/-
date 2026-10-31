@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>منوی اصلی مدیریت - امانت‌داری کریمی</title>
+  <title>منوی اصلی - امانت‌داری کریمی</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
@@ -47,10 +47,10 @@
         <p>سیستم جامع مدیریت حساب‌ها و صرافی</p>
       </div>
 
-      <!-- دکمه مدیریت مشتریان -->
-      <a href="index.html" class="menu-btn">👥 مدیریت مشتریان و حساب‌ها</a>
+      <!-- لینک به صفحه مشتریان (می‌توانید نام فایل مشتریان را مثلاً customers.html بگذارید) -->
+      <a href="customers.html" class="menu-btn">👥 مدیریت مشتریان و حساب‌ها</a>
 
-      <!-- دکمه مدیریت صرافی‌ها -->
+      <!-- لینک به صفحه صرافی‌ها -->
       <a href="broker.html" class="menu-btn broker-btn">🏦 مدیریت صرافی‌ها و کارگزاران</a>
 
       <!-- دکمه خروج -->
@@ -64,7 +64,7 @@
     const SUPABASE_KEY = "sb_publishable_gk2QHcbqdczNyOFZqz9VBQ_hwVyEbde";
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // بررسی ورود کاربر (اگر لاگین نکرده باشد به صفحه لاگین هدایت می‌شود)
+    // بررسی ورود کاربر
     window.onload = function() {
       if (localStorage.getItem("admin_logged") !== "true") {
         window.location.href = "login.html";
