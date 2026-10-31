@@ -1257,7 +1257,7 @@
           let siteLink = "https://karimi-trust-app.vercel.app/";
           let welcomeMsg = `✨ *تبریک، حساب مدیریتی شما ایجاد شد* ✨\n\n` +
                            `سلام *${name}* عزیز،\n` +
-                           `پنل مدیریت امانت‌داری کریمی برای شما فعال گردید.\n\n` +
+                           `پنل مدیریت امانت‌داری  برای شما فعال گردید.\n\n` +
                            `📧 ایمیل ورود: \`${email}\`\n` +
                            `🔑 رمز عبور: \`${pin}\`\n\n` +
                            `🌐 لینک ورود به سایت:\n${siteLink}`;
@@ -1699,7 +1699,6 @@
                     `🆔 کُد حساب: \`${accountId}\`\n` +
                     `📞 شماره تماس: ${accPhone || '-'}\n` +
                     `💬 چت‌آیدی: \`${accChatId}\`\n\n` +
-                    `🌐 لینک بررسی حساب:\n${siteLink}`;
           sendTelegramMessage(token, accChatId, msg);
         }
       }
@@ -1710,7 +1709,7 @@
         let { token } = getCurrentAdminTokenAndChat();
         let accTxs = allTransactions.filter(t => String(getVal(t, ['AccountID', 'accountid'])) === String(accountId));
         if (token && accChatId) {
-          let historyHeader = `✨ *امانت‌داری کریمی* ✨\n\nسلام *${accName}* عزیز،\nچت‌آیدی تلگرام شما روی سیستم ثبت شد. در ادامه کل تاریخچه و سابقه معاملات شما ارسال می‌گردد:\n────────────────────────`;
+          let historyHeader = `✨ *امانت‌داری* ✨\n\nسلام *${accName}* عزیز،\nچت‌آیدی تلگرام شما روی سیستم ثبت شد. در ادامه کل تاریخچه و سابقه معاملات شما ارسال می‌گردد:\n────────────────────────`;
           await sendTelegramMessage(token, accChatId, historyHeader);
 
           for (let tx of accTxs) {
@@ -2030,7 +2029,7 @@
               await sendTelegramMessage(token, customerChatId, msg3);
             } else {
               let msg1 = `✨ *امانتداری* ✨\n\nمحترم *${currentAccountName}*،\n${actionTitle}\n\n🔹 نوع: *${opType}* (${selectedDirectionValue})\n💰 مبلغ: *${formatEnMoney(amt)} ${selectedCurrencyValue}*\n📅 تاریخ: ${formatEnNum(txDate)}`;
-              let msg2 = `📊 *بیلان به‌روز حساب شما:*\n${liveBalance}\n\n🌐 لینک بررسی آنلاین:\n${siteLink}`;
+              let msg2 = `📊 *بیلان به‌روز حساب شما:*\n${liveBalance}\n\n🌐 
 
               await sendTelegramMessage(token, customerChatId, msg1);
               await sendTelegramMessage(token, customerChatId, msg2);
@@ -2141,8 +2140,6 @@
         `📅 تاریخ: ${txDate}`,
         ...(isTransferOrRemittance ? [] : [`📝 شرح: ${desc || '-'}`]),
         ``,
-        `🌐 بررسی آنلاین حساب:`,
-        siteLink,
         `────────────────────────`,
         `ادر خدمت شما هستیم  🙏`
       ];
@@ -2182,8 +2179,6 @@
         liveBalText,
         ``,
         `────────────────────────`,
-        `🌐 لینک بررسی آنلاین حساب:`,
-        siteLink
       ];
 
       let encodedMessage = lines.map(line => encodeURIComponent(line)).join('%0A');
