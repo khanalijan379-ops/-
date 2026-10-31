@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>مدیریت امانت‌داری کریمی</title>
+  <title>مدیریت حساب های من </title>
   
   <!-- کتابخانه Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -390,7 +390,7 @@
     <div id="viewDashboard" class="view-section active">
       <div class="card" style="background: transparent; border: none; box-shadow: none; padding: 0;">
         <div class="card-header-styled">
-          <h3>🏛️ مدیریت امانت‌داری کریمی</h3>
+          <h3>🏛️ مدیریت حساب های من </h3>
           <div class="flex-row">
             <button class="btn btn-secondary btn-sm" onclick="playInteractionEffect(); loadDataFromSupabase(true)">🔄 همگام‌سازی</button>
             <button class="btn btn-danger btn-sm" onclick="playInteractionEffect(); handleLogout()">خروج</button>
@@ -2131,7 +2131,7 @@
       let isTransferOrRemittance = (opType === "حواله" || opType === "انتقال");
 
       let lines = [
-        `✨ *امانت‌داری کریمی* ✨`,
+        `✨ *اامانت داری * ✨`,
         `────────────────────────`,
         `محترم آقای *${currentAccountName}*`,
         `با سلام، تراکنش جدیدی در حساب شما به ثبت رسید:`,
@@ -2144,7 +2144,7 @@
         `🌐 بررسی آنلاین حساب:`,
         siteLink,
         `────────────────────────`,
-        `با تشکر، امانت‌داری کریمی 🙏`
+        `ادر خدمت شما هستیم  🙏`
       ];
 
       let encodedMessage = lines.map(line => encodeURIComponent(line)).join('%0A');
@@ -2169,7 +2169,7 @@
       let liveBalText = getAccountLiveBalanceText(currentAccountId);
 
       let lines = [
-        `✨ *امانت‌داری کریمی* ✨`,
+        `✨ *امانتداری* ✨`,
         `────────────────────────`,
         `👤 *مشخصات حساب مشتری:*`,
         `▫️ نام: *${currentAccountName}*`,
