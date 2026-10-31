@@ -28,14 +28,24 @@
     h2 { font-size: 1.15rem; font-weight: 900; }
     p { font-size: 0.82rem; color: #cbd5e1; margin-top: 4px; font-weight: bold; }
 
-    .menu-btn { display: block; width: 100%; padding: 14px; margin-bottom: 12px; background: #f8fafc; border: 2px solid var(--border-color); border-radius: 10px; font-weight: 900; font-size: 0.95rem; color: #1e293b; text-decoration: none; transition: all 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .form-group { margin-bottom: 12px; text-align: right; }
+    label { display: block; font-size: 0.85rem; font-weight: 800; margin-bottom: 4px; color: #1e293b; }
+    input { width: 100%; padding: 10px 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; font-weight: 700; outline: none; background: #fff; }
+    input:focus { border-color: #0284c7; box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.2); }
+
+    .menu-btn { display: block; width: 100%; padding: 14px; margin-bottom: 12px; background: #f8fafc; border: 2px solid var(--border-color); border-radius: 10px; font-weight: 900; font-size: 0.95rem; color: #1e293b; text-decoration: none; transition: all 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); cursor: pointer; }
     .menu-btn:hover { background: #0284c7; color: white; border-color: #0369a1; transform: translateY(-2px); }
     
     .broker-btn { background: #f0fdf4; border-color: #10b981; color: #047857; }
     .broker-btn:hover { background: #10b981; color: white; }
 
+    .action-btn { background: #059669; color: white; border: none; font-size: 1rem; margin-top: 6px; }
+    .action-btn:hover { background: #047857; }
+
     .logout-btn { background: #fef2f2; border-color: #f87171; color: #dc2626; margin-top: 16px; font-size: 0.85rem; padding: 10px; }
     .logout-btn:hover { background: #dc2626; color: white; border-color: #b91c1c; }
+
+    .error-msg { color: #dc2626; font-size: 0.82rem; font-weight: bold; margin: 8px 0; display: none; }
   </style>
 </head>
 <body>
@@ -47,34 +57,66 @@
         <p>سیستم جامع مدیریت حساب‌ها و صرافی</p>
       </div>
 
-      <!-- لینک به صفحه مشتریان (می‌توانید نام فایل مشتریان را مثلاً customers.html بگذارید) -->
-      <a href="customers.html" class="menu-btn">👥 مدیریت مشتریان و حساب‌ها</a>
+      <!-- بخش ورود -->
+      <div id="loginSection">
+        <div class="form-group">
+          <label>ایمیل مدیر:</label>
+          <input type="email" id="loginEmail" placeholder="ایمیل خود را وارد کنید">
+        </div>
+        <div class="form-group">
+          <label>رمز عبور:</label>
+          <input type="password" id="loginPass" placeholder="رمز عبور">
+        </div>
+        <div id="errorMsg" class="error-msg">ایمیل یا رمز عبور اشتباه است!</div>
+        <button class="menu-btn action-btn" onclick="checkLogin()">ورود به سیستم</button>
+      </div>
 
-      <!-- لینک به صفحه صرافی‌ها -->
-      <a href="broker.html" class="menu-btn broker-btn">🏦 مدیریت صرافی‌ها و کارگزاران</a>
+      <!-- بخش منوی اصلی (پس از ورود) -->
+      <div id="menuSection" style="display: none;">
+        <a href="customers.html" class="menu-btn">👥 مدیریت مشتریان و حساب‌ها</a>
+        <a href="broker.html" class="menu-btn broker-btn">🏦 مدیریت صرافی‌ها و کارگزاران</a>
+        <button class="menu-btn logout-btn" onclick="logoutSystem()">🚪 خروج از حساب کاربری</button>
+      </div>
 
-      <!-- دکمه خروج -->
-      <a href="#" class="menu-btn logout-btn" onclick="logoutSystem()">🚪 خروج از حساب کاربری</a>
     </div>
   </div>
 
   <script>
-    // اطلاعات پایگاه داده جدید شما
     const SUPABASE_URL = "https://egmzjuscgstfodiqxmuf.supabase.co";
     const SUPABASE_KEY = "sb_publishable_gk2QHcbqdczNyOFZqz9VBQ_hwVyEbde";
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // بررسی ورود کاربر
     window.onload = function() {
-      if (localStorage.getItem("admin_logged") !== "true") {
-        window.location.href = "login.html";
+      if (localStorage.getItem("admin_logged") === "true") {
+        showMenu();
       }
     };
+
+    function checkLogin() {
+      const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+      const pass = document.getElementById("loginPass").value.trim();
+      const errEl = document.getElementById("errorMsg");
+
+      if (email === "khanalijan379@gmail.com" && pass === "77218731") {
+        localStorage.setItem("admin_logged", "true");
+        localStorage.setItem("admin_email", email);
+        errEl.style.display = "none";
+        showMenu();
+      } else {
+        errEl.style.display = "block";
+      }
+    }
+
+    function showMenu() {
+      document.getElementById("loginSection").style.display = "none";
+      document.getElementById("menuSection").style.display = "block";
+    }
 
     function logoutSystem() {
       localStorage.removeItem("admin_logged");
       localStorage.removeItem("admin_email");
-      window.location.href = "login.html";
+      document.getElementById("loginSection").style.display = "block";
+      document.getElementById("menuSection").style.display = "none";
     }
   </script>
 </body>
