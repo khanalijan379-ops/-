@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>مدیریت حساب های من </title>
+  <title>سامانه مدیریت حساب‌کتاب</title>
   
   <!-- کتابخانه Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
-  <!-- فونت فوق‌العاده زیبای وزیرمتن -->
+  <!-- فونت وزیرمتن -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -376,7 +376,7 @@
   <!-- صفحه ورود -->
   <div id="authOverlay">
     <div class="auth-card">
-      <div class="auth-title">🔐 ورود به مدیریت حساب های من </div>
+      <div class="auth-title">🔐 ورود به سامانه مدیریت</div>
       <div class="form-group"><label>ایمیل ادمین:</label><input type="email" id="loginEmail" dir="ltr" placeholder="ایمیل..."></div>
       <div class="form-group"><label>کد عبور (PIN):</label><input type="password" id="loginPin" dir="ltr" placeholder="رمز عبور..."></div>
       <button class="btn" onclick="playInteractionEffect(); handleLogin()">ورود به پنل مدیریت</button>
@@ -390,7 +390,7 @@
     <div id="viewDashboard" class="view-section active">
       <div class="card" style="background: transparent; border: none; box-shadow: none; padding: 0;">
         <div class="card-header-styled">
-          <h3>🏛️ مدیریت حساب های من </h3>
+          <h3>🏛️ پنل مدیریت حساب‌ها</h3>
           <div class="flex-row">
             <button class="btn btn-secondary btn-sm" onclick="playInteractionEffect(); loadDataFromSupabase(true)">🔄 همگام‌سازی</button>
             <button class="btn btn-danger btn-sm" onclick="playInteractionEffect(); handleLogout()">خروج</button>
@@ -874,7 +874,6 @@
           } else {
             document.getElementById("superAdminMenuBtn").style.display = "none";
           }
-          // بخش کارگزاری و دفاتر همکار برای همه ادمین‌ها و همکاران فعال قابل مشاهده و استفاده خواهد بود.
           document.getElementById("ownerBrokerMenuBtn").style.display = "flex";
 
           await loadDataFromSupabase(true);
@@ -908,7 +907,7 @@
       }
 
       if (email === MASTER_ADMIN_EMAIL.toLowerCase() && pin === MASTER_ADMIN_PIN) {
-        currentLoggedInAdmin = { id: MASTER_ADMIN_ID, name: "محمد شریف کریمی (مالک)", email: MASTER_ADMIN_EMAIL };
+        currentLoggedInAdmin = { id: MASTER_ADMIN_ID, name: "مدیر سیستم", email: MASTER_ADMIN_EMAIL };
         localStorage.setItem("adminAuthSessionData", JSON.stringify(currentLoggedInAdmin));
         
         document.getElementById("authOverlay").style.display = "none";
@@ -1254,13 +1253,11 @@
         alert("✅ ادمین جدید با موفقیت ایجاد شد!");
 
         if (botToken && chatId) {
-          let siteLink = "https://karimi-trust-app.vercel.app/";
           let welcomeMsg = `✨ *تبریک، حساب مدیریتی شما ایجاد شد* ✨\n\n` +
                            `سلام *${name}* عزیز،\n` +
-                           `پنل مدیریت امانت‌داری  برای شما فعال گردید.\n\n` +
+                           `پنل مدیریت حساب‌ها برای شما فعال گردید.\n\n` +
                            `📧 ایمیل ورود: \`${email}\`\n` +
-                           `🔑 رمز عبور: \`${pin}\`\n\n` +
-                           `🌐 لینک ورود به سایت:\n${siteLink}`;
+                           `🔑 رمز عبور: \`${pin}\``;
           sendTelegramMessage(botToken, chatId, welcomeMsg);
         }
       }
@@ -1690,15 +1687,14 @@
         await _supabase.from('accounts').insert([payload]);
         let { token } = getCurrentAdminTokenAndChat();
         if (token && accChatId) {
-          let siteLink = "https://karimi-trust-app.vercel.app/";
-          let msg = `✨ *امانت‌داری* ✨\n\n` +
+          let msg = `✨ *سامانه مدیریت حساب‌کتاب* ✨\n\n` +
                     `حساب شما با موفقیت ایجاد شد.\n` +
                     `مشتری گرامی *${accName}*، از اعتماد شما سپاسگزاریم.\n` +
                     `📌 اطلاعات حساب شما:\n` +
                     `👤 نام: ${accName}\n` +
                     `🆔 کُد حساب: \`${accountId}\`\n` +
                     `📞 شماره تماس: ${accPhone || '-'}\n` +
-                    `💬 چت‌آیدی: \`${accChatId}\`\n\n` +
+                    `💬 چت‌آیدی: \`${accChatId}\``;
           sendTelegramMessage(token, accChatId, msg);
         }
       }
@@ -1709,7 +1705,7 @@
         let { token } = getCurrentAdminTokenAndChat();
         let accTxs = allTransactions.filter(t => String(getVal(t, ['AccountID', 'accountid'])) === String(accountId));
         if (token && accChatId) {
-          let historyHeader = `✨ *امانت‌داری* ✨\n\nسلام *${accName}* عزیز،\nچت‌آیدی تلگرام شما روی سیستم ثبت شد. در ادامه کل تاریخچه و سابقه معاملات شما ارسال می‌گردد:\n────────────────────────`;
+          let historyHeader = `✨ *سامانه حساب‌کتاب* ✨\n\nسلام *${accName}* عزیز،\nچت‌آیدی تلگرام شما روی سیستم ثبت شد. در ادامه کل تاریخچه و سابقه معاملات شما ارسال می‌گردد:\n────────────────────────`;
           await sendTelegramMessage(token, accChatId, historyHeader);
 
           for (let tx of accTxs) {
@@ -2010,7 +2006,6 @@
       let acc = allAccounts.find(a => String(getVal(a, ['AccountID', 'accountid'])) === String(currentAccountId));
       
       if (token) {
-        let siteLink = "https://karimi-trust-app.vercel.app/";
         let actionTitle = editTransId ? "⚠️ تراکنش ویرایش شد:" : "📌 تراکنش جدید ثبت شد:";
         let liveBalance = getAccountLiveBalanceText(currentAccountId);
         let globalSystemBalance = getSystemGlobalBalanceText();
@@ -2020,16 +2015,16 @@
           if (customerChatId) {
             let isTransferOrRemittance = (opType === "حواله" || opType === "انتقال");
             if (isTransferOrRemittance) {
-              let msg1 = `✨ *امانت‌داری کریمی* ✨\n\nمحترم *${currentAccountName}*،\n${actionTitle}\n\n💰 مبلغ: *${formatEnMoney(amt)} ${selectedCurrencyValue}* (${selectedDirectionValue})\n📅 تاریخ: ${formatEnNum(txDate)}`;
-              let msg2 = `📜 *رسید انتقال:*\n${desc || 'بدون مشخصات'}\n\n⚠️ *برای گرفتن پول داشتن اسناد الزامی است*`;
-              let msg3 = `📊 *بیلان به‌روز حساب شما:*\n${liveBalance}\n\n🌐 لینک بررسی آنلاین:\n${siteLink}`;
+              let msg1 = `✨ *سامانه مدیریت حساب‌کتاب* ✨\n\nمحترم *${currentAccountName}*،\n${actionTitle}\n\n💰 مبلغ: *${formatEnMoney(amt)} ${selectedCurrencyValue}* (${selectedDirectionValue})\n📅 تاریخ: ${formatEnNum(txDate)}`;
+              let msg2 = `📜 *رسید انتقال:*\n${desc || 'بدون مشخصات'}`;
+              let msg3 = `📊 *بیلان به‌روز حساب شما:*\n${liveBalance}`;
               
               await sendTelegramMessage(token, customerChatId, msg1);
               await sendTelegramMessage(token, customerChatId, msg2);
               await sendTelegramMessage(token, customerChatId, msg3);
             } else {
-              let msg1 = `✨ *امانتداری* ✨\n\nمحترم *${currentAccountName}*،\n${actionTitle}\n\n🔹 نوع: *${opType}* (${selectedDirectionValue})\n💰 مبلغ: *${formatEnMoney(amt)} ${selectedCurrencyValue}*\n📅 تاریخ: ${formatEnNum(txDate)}`;
-              let msg2 = `📊 *بیلان به‌روز حساب شما:*\n${liveBalance}\n\n🌐 
+              let msg1 = `✨ *سامانه مدیریت حساب‌کتاب* ✨\n\nمحترم *${currentAccountName}*،\n${actionTitle}\n\n🔹 نوع: *${opType}* (${selectedDirectionValue})\n💰 مبلغ: *${formatEnMoney(amt)} ${selectedCurrencyValue}*\n📅 تاریخ: ${formatEnNum(txDate)}`;
+              let msg2 = `📊 *بیلان به‌روز حساب شما:*\n${liveBalance}`;
 
               await sendTelegramMessage(token, customerChatId, msg1);
               await sendTelegramMessage(token, customerChatId, msg2);
@@ -2105,8 +2100,7 @@
         `📜 ═════════════════ 📜`,
         ``,
         `${desc || 'بدون مشخصات توضیحات'}`,
-        ``,
-        `⚠️ *برای گرفتن پول داشتن اسناد الزامی است*`
+        ``
       ];
 
       let encodedMessage = receiptLines.map(line => encodeURIComponent(line)).join('%0A');
@@ -2125,12 +2119,11 @@
       let dirVal = String(getVal(tx, ['Direction', 'direction']) || '');
       let txDate = formatEnNum(getVal(tx, ['Date', 'date']) || '').split('T')[0];
       let desc = String(getVal(tx, ['Description', 'description']) || '').replaceAll('+', ' ');
-      let siteLink = "https://karimi-trust-app.vercel.app/";
 
       let isTransferOrRemittance = (opType === "حواله" || opType === "انتقال");
 
       let lines = [
-        `✨ *اامانت داری * ✨`,
+        `✨ *سامانه مدیریت حساب‌کتاب* ✨`,
         `────────────────────────`,
         `محترم آقای *${currentAccountName}*`,
         `با سلام، تراکنش جدیدی در حساب شما به ثبت رسید:`,
@@ -2141,7 +2134,7 @@
         ...(isTransferOrRemittance ? [] : [`📝 شرح: ${desc || '-'}`]),
         ``,
         `────────────────────────`,
-        `ادر خدمت شما هستیم  🙏`
+        `با تشکر 🙏`
       ];
 
       let encodedMessage = lines.map(line => encodeURIComponent(line)).join('%0A');
@@ -2161,12 +2154,11 @@
       if (!acc) return;
       let phone = formatEnNum(getVal(acc, ['Phone', 'phone']) || '').replace(/\D/g, '');
       let chatId = formatEnNum(getVal(acc, ['ChatID', 'chatid']) || '-');
-      let siteLink = "https://karimi-trust-app.vercel.app/";
 
       let liveBalText = getAccountLiveBalanceText(currentAccountId);
 
       let lines = [
-        `✨ *امانتداری* ✨`,
+        `✨ *سامانه مدیریت حساب‌کتاب* ✨`,
         `────────────────────────`,
         `👤 *مشخصات حساب مشتری:*`,
         `▫️ نام: *${currentAccountName}*`,
@@ -2178,7 +2170,7 @@
         ``,
         liveBalText,
         ``,
-        `────────────────────────`,
+        `────────────────────────`
       ];
 
       let encodedMessage = lines.map(line => encodeURIComponent(line)).join('%0A');
