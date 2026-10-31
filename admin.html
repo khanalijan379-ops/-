@@ -376,7 +376,7 @@
   <!-- صفحه ورود -->
   <div id="authOverlay">
     <div class="auth-card">
-      <div class="auth-title">🔐 مدیریت امانت‌داری کریمی</div>
+      <div class="auth-title">🔐 ورود به مدیریت حساب های من </div>
       <div class="form-group"><label>ایمیل ادمین:</label><input type="email" id="loginEmail" dir="ltr" placeholder="ایمیل..."></div>
       <div class="form-group"><label>کد عبور (PIN):</label><input type="password" id="loginPin" dir="ltr" placeholder="رمز عبور..."></div>
       <button class="btn" onclick="playInteractionEffect(); handleLogin()">ورود به پنل مدیریت</button>
@@ -1691,7 +1691,7 @@
         let { token } = getCurrentAdminTokenAndChat();
         if (token && accChatId) {
           let siteLink = "https://karimi-trust-app.vercel.app/";
-          let msg = `✨ *امانت‌داری کریمی* ✨\n\n` +
+          let msg = `✨ *امانت‌داری* ✨\n\n` +
                     `حساب شما با موفقیت ایجاد شد.\n` +
                     `مشتری گرامی *${accName}*، از اعتماد شما سپاسگزاریم.\n` +
                     `📌 اطلاعات حساب شما:\n` +
@@ -2029,7 +2029,7 @@
               await sendTelegramMessage(token, customerChatId, msg2);
               await sendTelegramMessage(token, customerChatId, msg3);
             } else {
-              let msg1 = `✨ *امانت‌داری کریمی* ✨\n\nمحترم *${currentAccountName}*،\n${actionTitle}\n\n🔹 نوع: *${opType}* (${selectedDirectionValue})\n💰 مبلغ: *${formatEnMoney(amt)} ${selectedCurrencyValue}*\n📅 تاریخ: ${formatEnNum(txDate)}`;
+              let msg1 = `✨ *امانتداری* ✨\n\nمحترم *${currentAccountName}*،\n${actionTitle}\n\n🔹 نوع: *${opType}* (${selectedDirectionValue})\n💰 مبلغ: *${formatEnMoney(amt)} ${selectedCurrencyValue}*\n📅 تاریخ: ${formatEnNum(txDate)}`;
               let msg2 = `📊 *بیلان به‌روز حساب شما:*\n${liveBalance}\n\n🌐 لینک بررسی آنلاین:\n${siteLink}`;
 
               await sendTelegramMessage(token, customerChatId, msg1);
