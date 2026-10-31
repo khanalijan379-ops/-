@@ -3,197 +3,135 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>داشبورد مدیریت - حساب کتاب من</title>
+  <title>حساب کتاب من - امانت‌داری کریمی</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary-dark: #0f172a;
-      --primary-gradient: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
-      --accent-blue: #0284c7;
-      --accent-green: #059669;
-      --bg-main: #f1f5f9;
+      --primary-gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      --accent-green: #10b981;
+      --accent-green-dark: #059669;
+      --bg-main: #e2e8f0;
       --card-bg: #ffffff;
       --text-main: #0f172a;
       --border-color: #cbd5e1;
       --radius-md: 16px;
-      --shadow-card: 0 10px 25px rgba(15, 23, 42, 0.08);
+      --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.08);
     }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; direction: rtl; }
-    body { background: var(--bg-main); color: var(--text-main); padding: 16px; min-height: 100vh; font-size: 14.5px; }
-
-    .container { max-width: 600px; margin: 0 auto; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', system-ui, sans-serif !important; direction: rtl; }
+    body { background: var(--bg-main); color: var(--text-main); padding: 16px; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+    .container { max-width: 440px; width: 100%; }
+    .card { background: var(--card-bg); border-radius: var(--radius-md); padding: 20px; border: 2px solid var(--border-color); box-shadow: var(--shadow-card); text-align: center; }
+    .card-header { background: var(--primary-gradient); color: #fff; padding: 20px; border-radius: 12px; margin: -20px -20px 20px -20px; border-bottom: 4px solid #38bdf8; position: relative; }
+    h2 { font-size: 1.25rem; font-weight: 900; }
+    p { font-size: 0.85rem; color: #cbd5e1; margin-top: 4px; font-weight: 700; }
     
-    .card-header {
-      background: var(--primary-gradient);
-      color: #fff;
-      padding: 24px 20px;
-      border-radius: var(--radius-md);
-      text-align: center;
-      margin-bottom: 20px;
-      border-bottom: 4px solid #38bdf8;
-      box-shadow: var(--shadow-card);
-    }
-    .card-header h2 { font-size: 1.35rem; font-weight: 900; margin-bottom: 6px; }
-    .card-header p { font-size: 0.85rem; color: #cbd5e1; font-weight: 700; }
-
-    .menu-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
+    .admin-badge {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid #38bdf8;
+      color: #38bdf8;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      margin-top: 8px;
+      cursor: pointer;
     }
 
-    .menu-card {
-      background: var(--card-bg);
-      border: 2px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 16px;
+    .menu-btn {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      width: 100%;
+      padding: 16px;
+      margin-bottom: 12px;
+      background: #ffffff;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 0.95rem;
+      color: var(--primary-dark);
       text-decoration: none;
-      color: var(--text-main);
       transition: all 0.2s ease;
       box-shadow: 0 4px 6px rgba(0,0,0,0.03);
     }
-    .menu-card:hover {
-      border-color: var(--accent-blue);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 15px rgba(2, 132, 199, 0.12);
-    }
+    .menu-btn:hover { border-color: #0284c7; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(2, 132, 199, 0.15); }
+    .menu-btn-broker { background: #f0fdf4; border-color: #a7f3d0; color: #047857; }
+    .menu-btn-broker:hover { background: #10b981; color: white; }
 
-    .menu-info { display: flex; align-items: center; gap: 14px; }
-    .menu-icon {
-      width: 46px;
-      height: 46px;
-      border-radius: 12px;
-      background: #e0f2fe;
-      color: #0369a1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.3rem;
-      font-weight: bold;
+    .secret-trigger { position: absolute; top: 12px; left: 12px; font-size: 1.1rem; cursor: pointer; opacity: 0.6; }
+    
+    /* modal */
+    #adminAuthModal {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px);
+      display: none; justify-content: center; align-items: center; z-index: 9999; padding: 16px;
     }
-    .menu-text h3 { font-size: 1rem; font-weight: 900; margin-bottom: 2px; }
-    .menu-text p { font-size: 0.78rem; color: #64748b; font-weight: 700; }
-
-    .badge {
-      background: #f1f5f9;
-      border: 1px solid #cbd5e1;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 800;
-      color: #475569;
-    }
-
-    .logout-btn {
-      width: 100%;
-      margin-top: 20px;
-      padding: 14px;
-      background: #fef2f2;
-      border: 2px solid #f87171;
-      color: #dc2626;
-      border-radius: var(--radius-md);
-      font-weight: 900;
-      font-size: 0.9rem;
-      cursor: pointer;
-      text-align: center;
-    }
-    .logout-btn:hover { background: #dc2626; color: white; }
+    .modal-card { background: white; padding: 20px; border-radius: 16px; width: 100%; max-width: 360px; text-align: right; }
+    .form-group { margin-bottom: 12px; }
+    label { display: block; font-size: 0.85rem; font-weight: 800; margin-bottom: 4px; color: #1e293b; }
+    input { width: 100%; padding: 10px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; font-weight: 700; outline: none; }
+    .btn-action { width: 100%; padding: 10px; background: #059669; color: white; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; margin-top: 6px; }
+    .btn-close { width: 100%; padding: 8px; background: #64748b; color: white; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; margin-top: 6px; }
   </style>
 </head>
 <body>
 
   <div class="container">
-    
-    <!-- سربرگ داشبورد -->
-    <div class="card-header">
-      <h2>🏛️ حساب کتاب من</h2>
-      <p>سامانه جامع مدیریت مشتریان، صرافی و اشتراک‌ها</p>
-    </div>
-
-    <!-- شبکه‌ی منوها -->
-    <div class="menu-grid">
-
-      <!-- ۱. بخش اشتراک‌ها -->
-      <a href="tenants.html" class="menu-card">
-        <div class="menu-info">
-          <div class="menu-icon" style="background:#f0fdf4; color:#15803d;">🏢</div>
-          <div class="menu-text">
-            <h3>مدیریت اشتراک‌ها (Tenants)</h3>
-            <p>تعریف و تمدید کسب‌وکارها و مشترکین سیستم</p>
-          </div>
+    <div class="card">
+      <div class="card-header">
+        <span class="secret-trigger" onclick="openAdminAuth()" title="مدیریت سیستم">🔐</span>
+        <h2>🏛️ حساب کتاب من</h2>
+        <p>سامانه جامع مدیریت مالی و صرافی</p>
+        <div class="admin-badge" onclick="openAdminAuth()">
+          👤 حساب من: <span id="adminNameDisplay">محمد شریف کریمی</span>
         </div>
-        <span class="badge">جدول tenants</span>
+      </div>
+
+      <!-- بخش حساب مشتریان (بر اساس الگوی admin.html) -->
+      <a href="admin.html" class="menu-btn">
+        <span>👥 مدیریت حساب مشتریان</span>
+        <span>←</span>
       </a>
 
-      <!-- ۲. بخش ادمین‌ها -->
-      <a href="admins.html" class="menu-card">
-        <div class="menu-info">
-          <div class="menu-icon" style="background:#fefce8; color:#a16207;">🔑</div>
-          <div class="menu-text">
-            <h3>مدیریت ادمین‌ها (Admins)</h3>
-            <p>تنظیم دسترسی‌ها، PIN کدها و مدیران سیستم</p>
-          </div>
-        </div>
-        <span class="badge">جدول admins</span>
+      <!-- بخش حساب با صرافی (بر اساس الگوی broker.html) -->
+      <a href="broker.html" class="menu-btn menu-btn-broker">
+        <span>🏦 مدیریت حساب با صرافی</span>
+        <span>←</span>
       </a>
 
-      <!-- ۳. بخش اشخاص و حساب‌ها -->
-      <a href="customers.html" class="menu-card">
-        <div class="menu-card-content menu-info">
-          <div class="menu-icon" style="background:#eff6ff; color:#1d4ed8;">👥</div>
-          <div class="menu-text">
-            <h3>حساب‌ها و اشخاص (Accounts)</h3>
-            <p>تعریف طرف حساب‌ها، مشتریان و شماره تماس‌ها</p>
-          </div>
-        </div>
-        <span class="badge">جدول accounts</span>
-      </a>
-
-      <!-- ۴. دفتر تراکنش‌های مالی -->
-      <a href="transactions.html" class="menu-card">
-        <div class="menu-info">
-          <div class="menu-icon" style="background:#faf5ff; color:#7e22ce;">💳</div>
-          <div class="menu-text">
-            <h3>تراکنش‌های مالی (Transactions)</h3>
-            <p>ثبت بدهکار، بستانکار و حساب‌کتاب عمومی</p>
-          </div>
-        </div>
-        <span class="badge">جدول transactions</span>
-      </a>
-
-      <!-- ۵. مدیریت صرافی‌ها -->
-      <a href="broker.html" class="menu-card">
-        <div class="menu-info">
-          <div class="menu-icon" style="background:#ecfeff; color:#0e7490;">🏦</div>
-          <div class="menu-text">
-            <h3>مدیریت صرافی‌ها (Brokers)</h3>
-            <p>ثبت لیست صرافی‌ها، شهرها و آدرس‌ها</p>
-          </div>
-        </div>
-        <span class="badge">جدول brokers</span>
-      </a>
-
-      <!-- ۶. معاملات صرافی -->
-      <a href="broker_tx.html" class="menu-card">
-        <div class="menu-info">
-          <div class="menu-icon" style="background:#fff1f2; color:#be123c;">💱</div>
-          <div class="menu-text">
-            <h3>معاملات صرافی (Broker Tx)</h3>
-            <p>حواله‌جات، تبدیل ارزها و محاسبه نرخ ارز</p>
-          </div>
-        </div>
-        <span class="badge">جدول broker_transactions</span>
-      </a>
+      <!-- پنل مخفی ادمین کل (فقط پس از احراز هویت ظاهر می‌شود) -->
+      <div id="hiddenSuperAdminPanel" style="display: none; margin-top: 16px; padding-top: 16px; border-top: 2px dashed #cbd5e1;">
+        <h3 style="font-size: 0.95rem; color: #0284c7; margin-bottom: 10px;">⚙️ پنل مدیریتی ادمین کل (SaaS)</h3>
+        <a href="tenants.html" class="menu-btn" style="background: #fefce8; border-color: #fef08a; color: #a16207;">
+          <span>🏢 مدیریت اشتراک‌ها و کسب‌وکارها (Tenants)</span>
+          <span>⚙️</span>
+        </a>
+        <button onclick="lockAdminPanel()" style="background: #fef2f2; border: 1px solid #fca5a5; color: #dc2626; padding: 8px; border-radius: 8px; width: 100%; font-weight: 800; cursor: pointer;">🔒 قفل کردن پنل ادمین</button>
+      </div>
 
     </div>
+  </div>
 
-    <!-- دکمه خروج -->
-    <button class="logout-btn" onclick="logout()">🚪 خروج از سیستم مدیریت</button>
-
+  <!-- مودال احراز هویت کلید ادمین -->
+  <div id="adminAuthModal">
+    <div class="modal-card">
+      <h3 style="margin-bottom: 12px; color: #0f172a; text-align: center;">🔐 کلید امنیتی ادمین</h3>
+      <div class="form-group">
+        <label>ایمیل مدیر کل:</label>
+        <input type="email" id="authEmail" value="khanalijan379@gmail.com" dir="ltr" readonly style="background: #f1f5f9;">
+      </div>
+      <div class="form-group">
+        <label>رمز عبور امنیتی:</label>
+        <input type="password" id="authPass" placeholder="رمز عبور..." dir="ltr">
+      </div>
+      <button class="btn-action" onclick="verifyAdminKey()">ورود به پنل ادمین</button>
+      <button class="btn-close" onclick="closeAdminAuth()">انصراف</button>
+    </div>
   </div>
 
   <script>
@@ -201,9 +139,39 @@
     const SUPABASE_KEY = "sb_publishable_gk2QHcbqdczNyOFZqz9VBQ_hwVyEbde";
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    function logout() {
-      localStorage.removeItem("admin_logged");
-      window.location.href = "login.html";
+    window.onload = function() {
+      if (localStorage.getItem("super_admin_unlocked") === "true") {
+        document.getElementById("hiddenSuperAdminPanel").style.display = "block";
+      }
+    };
+
+    function openAdminAuth() {
+      document.getElementById("adminAuthModal").style.display = "flex";
+      document.getElementById("authPass").focus();
+    }
+
+    function closeAdminAuth() {
+      document.getElementById("adminAuthModal").style.display = "none";
+      document.getElementById("authPass").value = "";
+    }
+
+    function verifyAdminKey() {
+      const email = document.getElementById("authEmail").value.trim().toLowerCase();
+      const pass = document.getElementById("authPass").value.trim();
+
+      if (email === "khanalijan379@gmail.com" && pass === "77218731") {
+        localStorage.setItem("super_admin_unlocked", "true");
+        document.getElementById("hiddenSuperAdminPanel").style.display = "block";
+        closeAdminAuth();
+        alert("✅ کلید ادمین تایید شد و امکانات مدیریتی فعال گردید.");
+      } else {
+        alert("❌ کلید یا رمز عبور ادمین اشتباه است!");
+      }
+    }
+
+    function lockAdminPanel() {
+      localStorage.removeItem("super_admin_unlocked");
+      document.getElementById("hiddenSuperAdminPanel").style.display = "none";
     }
   </script>
 </body>
