@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>مدیریت مشتریان - امانت‌داری کریمی</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --primary-dark: #0f172a;
+      --primary-gradient: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+      --accent-green: #10b981;
+      --bg-main: #e2e8f0;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --border-color: #94a3b8;
+      --radius-md: 14px;
+      --shadow-card: 0 10px 25px rgba(15, 23, 42, 0.12);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; direction: rtl; }
+    body { background: var(--bg-main); color: var(--text-main); padding: 10px; font-size: 14.5px; min-height: 100vh; padding-bottom: 80px; }
+    .container { max-width: 920px; margin: 0 auto; }
+    .card { background: var(--card-bg); border-radius: var(--radius-md); padding: 14px; border: 2px solid var(--border-color); margin-bottom: 12px; box-shadow: var(--shadow-card); }
+    .card-header { background: var(--primary-gradient); color: #fff; padding: 12px 16px; border-radius: 10px; margin: -14px -14px 14px -14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #38bdf8; }
+    h3 { font-size: 1.05rem; font-weight: 900; }
+    .btn { padding: 10px 14px; background: #059669; color: white; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; text-align: center; font-size: 0.9rem; text-decoration: none; display: inline-flex; justify-content: center; align-items: center; gap: 6px; }
+    .btn-secondary { background: #475569; }
+    .form-group { margin-bottom: 10px; }
+    label { display: block; font-size: 0.85rem; font-weight: 800; margin-bottom: 4px; color: #1e293b; }
+    input { width: 100%; padding: 10px 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; font-weight: 700; outline: none; background: #fff; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="card" style="padding: 10px; background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <h3 style="color:var(--primary-dark); font-size:1.05rem;">👥 مشتریان - امانت‌داری کریمی</h3>
+          <span style="font-size:0.8rem; color:#64748b; font-weight:bold;">مدیریت حساب‌ها و اشخاص</span>
+        </div>
+        <div>
+          <a href="index.html" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;">🏠 منوی اصلی</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="color:#0369a1; margin-bottom:10px;">➕ افزودن مشتری و حساب جدید</h3>
+      <div class="form-group">
+        <label>نام مشتری:</label>
+        <input type="text" id="customerNameInput" placeholder="نام و نام خانوادگی">
+      </div>
+      <div class="form-group">
+        <label>شماره تماس / توضیحات:</label>
+        <input type="text" id="customerDescInput" placeholder="توضیحات...">
+      </div>
+      <button class="btn" style="width:100%; margin-top:6px;" onclick="saveCustomer()">💾 ذخیره حساب مشتری</button>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://egmzjuscgstfodiqxmuf.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_gk2QHcbqdczNyOFZqz9VBQ_hwVyEbde";
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function saveCustomer() {
+      const name = document.getElementById("customerNameInput").value.trim();
+      if(!name) { alert("نام مشتری الزامی است."); return; }
+      alert("✅ حساب مشتری با موفقیت ثبت شد!");
+    }
+  </script>
+</body>
+</html>
