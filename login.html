@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ورود ادمین - امانت‌داری کریمی</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --primary-dark: #0f172a;
+      --primary-gradient: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+      --accent-green: #10b981;
+      --bg-main: #e2e8f0;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --border-color: #94a3b8;
+      --radius-md: 14px;
+      --shadow-card: 0 10px 25px rgba(15, 23, 42, 0.12);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; direction: rtl; }
+    body { background: var(--bg-main); color: var(--text-main); padding: 16px; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+    .container { max-width: 400px; width: 100%; }
+    .card { background: var(--card-bg); border-radius: var(--radius-md); padding: 20px; border: 2px solid var(--border-color); box-shadow: var(--shadow-card); }
+    .header { background: var(--primary-gradient); color: #fff; padding: 16px; border-radius: 10px; margin: -20px -20px 20px -20px; text-align: center; border-bottom: 3px solid #38bdf8; }
+    h2 { font-size: 1.15rem; font-weight: 900; }
+    .form-group { margin-bottom: 12px; }
+    label { display: block; font-size: 0.85rem; font-weight: 800; margin-bottom: 4px; color: #1e293b; }
+    input { width: 100%; padding: 10px 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; font-weight: 700; outline: none; background: #fff; }
+    input:focus { border-color: #0284c7; box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.2); }
+    .btn { width: 100%; padding: 12px; background: #059669; color: white; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; font-size: 0.95rem; text-align: center; margin-top: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+    .error-msg { color: #dc2626; font-size: 0.82rem; font-weight: bold; margin-top: 8px; text-align: center; display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <h2>🏛️ امانت‌داری کریمی</h2>
+        <p style="font-size:0.8rem; color:#cbd5e1; margin-top:4px;">سیستم اختصاصی مدیریت ادمین</p>
+      </div>
+
+      <div class="form-group">
+        <label>ایمیل مدیریتی:</label>
+        <input type="email" id="loginEmail" placeholder="ایمیل خود را وارد کنید">
+      </div>
+
+      <div class="form-group">
+        <label>رمز عبور:</label>
+        <input type="password" id="loginPass" placeholder="رمز عبور">
+      </div>
+
+      <div id="errorMsg" class="error-msg">ایمیل یا رمز عبور اشتباه است!</div>
+
+      <button class="btn" onclick="handleLogin()">ورود به سیستم</button>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://zpehwkvtbiceurfpafiw.supabase.co";
+    const SUPABASE_KEY = "sb_publishable__ZK44kWZES328UQJ7P_zzw_tZoc465D";
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function handleLogin() {
+      const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+      const pass = document.getElementById("loginPass").value.trim();
+      const errEl = document.getElementById("errorMsg");
+
+      // چک کردن ایمیل و رمز اختصاصی شما
+      if (email === "khanalijan379@gmail.com" && pass === "77218731") {
+        localStorage.setItem("admin_logged", "true");
+        localStorage.setItem("admin_email", email);
+        window.location.href = "admin.html";
+      } else {
+        errEl.style.display = "block";
+      }
+    }
+  </script>
+</body>
+</html>
