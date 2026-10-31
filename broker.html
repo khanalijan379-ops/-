@@ -5,58 +5,68 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>مدیریت صرافی‌ها - امانت‌داری کریمی</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary-dark: #0f172a;
-      --primary-gradient: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+      --primary-gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
       --accent-green: #10b981;
+      --accent-green-dark: #059669;
       --bg-main: #e2e8f0;
       --card-bg: #ffffff;
       --text-main: #0f172a;
-      --border-color: #94a3b8;
+      --border-color: #cbd5e1;
       --radius-md: 14px;
-      --shadow-card: 0 10px 25px rgba(15, 23, 42, 0.12);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; direction: rtl; }
-    body { background: var(--bg-main); color: var(--text-main); padding: 10px; font-size: 14.5px; min-height: 100vh; padding-bottom: 80px; }
-    .container { max-width: 920px; margin: 0 auto; }
-    .card { background: var(--card-bg); border-radius: var(--radius-md); padding: 14px; border: 2px solid var(--border-color); margin-bottom: 12px; box-shadow: var(--shadow-card); }
-    .card-header { background: var(--primary-gradient); color: #fff; padding: 12px 16px; border-radius: 10px; margin: -14px -14px 14px -14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #38bdf8; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', system-ui, sans-serif !important; direction: rtl; }
+    body { background: var(--bg-main); color: var(--text-main); padding: 10px; min-height: 100vh; }
+    .container { max-width: 800px; margin: 0 auto; }
+    .card { background: var(--card-bg); border-radius: var(--radius-md); padding: 16px; border: 2px solid var(--border-color); margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .card-header { background: var(--primary-gradient); color: #fff; padding: 14px 18px; border-radius: 12px; margin: -16px -16px 16px -16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #38bdf8; }
     h3 { font-size: 1.05rem; font-weight: 900; }
-    .btn { padding: 10px 14px; background: #059669; color: white; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; text-align: center; font-size: 0.9rem; text-decoration: none; display: inline-flex; justify-content: center; align-items: center; gap: 6px; }
+    .btn { padding: 10px 14px; background: var(--accent-green-dark); color: white; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; text-align: center; text-decoration: none; display: inline-flex; justify-content: center; align-items: center; font-size: 0.88rem; }
     .btn-secondary { background: #475569; }
-    .form-group { margin-bottom: 10px; }
+    .form-group { margin-bottom: 12px; }
     label { display: block; font-size: 0.85rem; font-weight: 800; margin-bottom: 4px; color: #1e293b; }
-    input, select { width: 100%; padding: 10px 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; font-weight: 700; outline: none; background: #fff; }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    input, select { width: 100%; padding: 10px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; font-weight: 700; outline: none; background: #fff; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .broker-item { background: #ffffff; border: 2px solid var(--border-color); padding: 12px; border-radius: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <div class="card" style="padding: 10px; background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div>
-          <h3 style="color:var(--primary-dark); font-size:1.05rem;">🏦 صرافی‌ها - امانت‌داری کریمی</h3>
-          <span id="activeBrokerTitle" style="font-size:0.8rem; color:#64748b; font-weight:bold;">در حال بارگذاری...</span>
-        </div>
-        <div>
-          <a href="index.html" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;">🏠 منوی اصلی</a>
-        </div>
-      </div>
-    </div>
-
     <div class="card">
-      <h3 style="color:#0369a1; margin-bottom:10px;">➕ ثبت معامله صرافی</h3>
-      <div class="form-group">
-        <label>نام صرافی:</label>
-        <input type="text" id="brokerNameInput" placeholder="نام صرافی را وارد کنید">
+      <div class="card-header">
+        <h3>🏦 مدیریت حساب با صرافی</h3>
+        <a href="index.html" class="btn btn-secondary">🏠 منوی اصلی</a>
       </div>
-      <div class="form-group">
-        <label>مبلغ:</label>
-        <input type="number" id="brokerAmountInput" placeholder="0">
+
+      <div style="margin-bottom: 16px;">
+        <h4 style="margin-bottom: 10px; color: #0284c7;">➕ تعریف صرافی جدید</h4>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>نام صرافی:</label>
+            <input type="text" id="brokerName" placeholder="نام صرافی">
+          </div>
+          <div class="form-group">
+            <label>شهر:</label>
+            <input type="text" id="brokerCity" placeholder="شهر محل فعالیت">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>شماره تماس / واتساپ:</label>
+          <input type="text" id="brokerPhone" placeholder="07..." dir="ltr">
+        </div>
+        <button class="btn" style="width: 100%;" onclick="saveBrokerInfo()">💾 ذخیره اطلاعات صرافی</button>
       </div>
-      <button class="btn" style="width:100%; margin-top:6px;" onclick="saveBrokerTx()">💾 ذخیره تراکنش صرافی</button>
+
+      <hr style="margin: 16px 0; border: 0; border-top: 2px dashed #cbd5e1;">
+
+      <h4 style="margin-bottom: 10px;">🏛️ لیست صرافی‌های ثبت‌شده</h4>
+      <div id="brokersListContainer">در حال بارگذاری...</div>
     </div>
   </div>
 
@@ -66,15 +76,66 @@
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     window.onload = function() {
-      document.getElementById("activeBrokerTitle").innerText = "آماده برای ثبت تراکنش";
+      loadBrokers();
     };
 
-    async function saveBrokerTx() {
-      const name = document.getElementById("brokerNameInput").value.trim();
-      const amount = parseFloat(document.getElementById("brokerAmountInput").value) || 0;
-      if(!name || amount <= 0) { alert("لطفاً اطلاعات را به طور کامل وارد کنید."); return; }
+    async function loadBrokers() {
+      const container = document.getElementById("brokersListContainer");
+      const { data, error } = await _supabase.from('brokers').select('*');
       
-      alert("✅ اطلاعات صرافی با موفقیت ثبت شد!");
+      if (error) {
+        container.innerHTML = `<div style="color:red;">خطا در دریافت اطلاعات صرافی‌ها: ${error.message}</div>`;
+        return;
+      }
+
+      container.innerHTML = "";
+      if (!data || data.length === 0) {
+        container.innerHTML = `<div style="text-align:center; color:#64748b;">هیچ صرافی ثبت نشده است.</div>`;
+        return;
+      }
+
+      data.forEach(b => {
+        container.innerHTML += `
+          <div class="broker-item">
+            <div>
+              <b style="font-size: 1rem; color: #0f172a;">${b.name || 'بدون نام'} (${b.city || 'بدون شهر'})</b>
+              <div style="font-size: 0.8rem; color: #64748b;">تلفن: ${b.phone || '-'} | کد: ${b.broker_id}</div>
+            </div>
+            <span style="background: #f0fdf4; color: #047857; padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 0.8rem;">فعال</span>
+          </div>
+        `;
+      });
+    }
+
+    async function saveBrokerInfo() {
+      const name = document.getElementById("brokerName").value.trim();
+      const city = document.getElementById("brokerCity").value.trim();
+      const phone = document.getElementById("brokerPhone").value.trim();
+
+      if (!name) {
+        alert("لطفاً نام صرافی را وارد کنید.");
+        return;
+      }
+
+      const brokerId = "BRK-" + Math.floor(1000 + Math.random() * 9000);
+      const payload = {
+        broker_id: brokerId,
+        name: name,
+        city: city,
+        phone: phone
+      };
+
+      const { error } = await _supabase.from('brokers').insert([payload]);
+      if (error) {
+        alert("خطا در ثبت صرافی: " + error.message);
+        return;
+      }
+
+      alert("✅ اطلاعات صرافی با موفقیت ذخیره شد!");
+      document.getElementById("brokerName").value = "";
+      document.getElementById("brokerCity").value = "";
+      document.getElementById("brokerPhone").value = "";
+      loadBrokers();
     }
   </script>
 </body>
